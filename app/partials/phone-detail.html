@@ -1,0 +1,29 @@
+<div class="container">
+    <img ng-src="{{mainImageUrl}}" class="phone">
+    <h1>{{phone.name}}</h1>
+    <p>{{phone.description}}</p>
+
+    <ul class="phone-thumbs list-inline">
+        <li ng-repeat="img in phone.images">
+            <img ng-src="{{img}}" width="100" ng-click="setImage(img)">
+        </li>
+    </ul>
+
+    <ul class="specs list-unstyled">
+        <li>
+            <span>Availability and Networks</span>
+            <dl>
+                <dt>Availability</dt>
+                <dd ng-repeat="availability in phone.availability">
+                    {{availability}}
+                </dd>
+            </dl>
+            <dl>
+                <dt>Infrared</dt>
+                <dd>{{phone.connectivity.infrared | checkmark}}</dd>
+                <dt>GPS</dt>
+                <dd>{{phone.connectivity.gps | checkmark}}</dd>
+            </dl>
+        </li>
+    </ul>
+</div>
