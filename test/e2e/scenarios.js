@@ -17,10 +17,11 @@
  * process.
  */
 
+var url = require('url');
 
 describe('PhoneCat App', function () {
 
-    describe('Phone list view', function () {
+    describe('PhoneList View', function () {
 
         // before each of the tests inside this `describe` we are going
         // to navigate to the app/index.html file in the server so that
@@ -54,7 +55,6 @@ describe('PhoneCat App', function () {
             element(by.model('query')).sendKeys('nexus');
             expect(element.all(by.repeater('phone in phones')).count())
                 .toBe(1);
-
         });
 
         it('should be able to control phone order via dropdown select box',
@@ -89,5 +89,59 @@ describe('PhoneCat App', function () {
                 });
             }
         );
+
+        it('should render phone specific links', function () {
+            element(by.model('query')).sendKeys('nexus');
+            element(by.css('.phones li a')).click();
+
+            browser.getLocationAbsUrl().then(function (absLocation) {
+                expect(url.parse(absLocation).hash).toBe('#/phones/nexus-s');
+            });
+        });
+
+        it('should redirect index.html to index.html#/phones', function () {
+            // it should expect that when we go to the landing page it
+            // automatically redirects to the /phones.
+            browser.getLocationAbsUrl().then(function (absLocation) {
+                expect(url.parse(absLocation).hash).toBe('#/phones');
+            });
+        });
     });
+
+    describe('PhoneDetail View', function () {
+
+        beforeEach(function () {
+            // browser is wrapper around an instance of webdriver.
+            // Provides navigation and page-wide info.
+            browser.get('../../app/index.html#/phones/nexus-s');
+        });
+
+        it('should display nexus-s page', function () {
+            // get the element that is referenced by the binding
+            // 'phone.name' and then check the text.
+            expect(element(by.binding('phone.name')).getText()).toBe('Nexus S');
+        });
+
+        it('should display the first phone image as the main phone image',
+           function () {
+            // go get the attribute of the element referenced by the css
+            // '.phone' and then apply the function 'then' (as we are
+            // dealing here with promises) and check the url.
+            element(by.css('.phone')).getAttribute('src').then(function (pathname) {
+                expect(url.parse(pathname).path, 'img/phones/nexus-s-0.jpg');
+            });
+        });
+
+        it('should swap main image if a thumbnail is clicked on', function () {
+            // perform a click on a thumbnail image and then do the
+            // previous logic again.
+            element(by.css('.phone-thumbs li:nth-child(3) img')).click();
+
+            element(by.css('.phone')).getAttribute('src').then(function (pathname) {
+                expect(url.parse(pathname).path, 'img/phones/nexus-s-2.jpg');
+            });
+        });
+
+    });
+
 });
