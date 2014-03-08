@@ -31,6 +31,7 @@ describe('PhoneCat App', function () {
             // browser is wrapper around an instance of webdriver.
             // Provides navigation and page-wide info.
             browser.get('../../app/index.html');
+
         });
 
 
@@ -59,28 +60,33 @@ describe('PhoneCat App', function () {
         it('should be able to control phone order via dropdown select box',
             function () {
 
-                var phoneList;
-
+                // send the 'tablet' input to the 'query' model.
                 element(by.model('query')).sendKeys('tablet');
 
-                // THIS IS NOT RIGHT.
+                // get a reference to the ngRepeater directive 'phone in
+                // phones' but just for the 'name' colum of the phones.
 
-                // expect(element.all(by.repeater('phone in phones')
-                //        .row(0).column('{{phone.name}}')))
-                //     .toEqual("Motorola XOOM\u2122 with Wi-Fi");
+                var elems = element.all(by.repeater('phone in phones').column('name'));
 
+                // get the first element:
+                elems.first().then(function (elem) {
+                    expect(elem.getText()).toBe("Motorola XOOM™ with Wi-Fi");
+                });
 
+                // select the option with 'value=name' and then perform
+                // the click.
 
-        //         input('query').enter('tablet');
-        //         expect(repeater('.phones li', 'Phone List').column('phone.name')).
-        //           toEqual(["Motorola XOOM\u2122 with Wi-Fi",
-        //                    "MOTOROLA XOOM\u2122"]);
+                element(by.css('select option[value="name"]')).click();
 
-        //         select('orderProp').option('Alphabetical');
+                // we don't have to call `element.all...` again because
+                // elems is just a pointer to something, and not a list
+                // with all the elements and etc.
 
-        //         expect(repeater('.phones li', 'Phone List').column('phone.name')).
-        //           toEqual(["MOTOROLA XOOM\u2122",
-        //                    "Motorola XOOM\u2122 with Wi-Fi"]);
+                // get the first element and let's see what it is within
+                // it.
+                elems.first().then(function (elem) {
+                    expect(elem.getText()).toBe("MOTOROLA XOOM\u2122");
+                });
             }
         );
     });
