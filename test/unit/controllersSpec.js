@@ -18,7 +18,21 @@ describe('PhoneCat controllers', function() {
 
     // loading 'phonecatApp' module definition before each test.
     beforeEach(function () {
+
+        // adding a custom matcher so that we are able to check only the
+        // data (properties) that two objects have and ignore the
+        // different methods.
+
+        this.addMatchers({
+            toEqualData: function (expected) {
+                return angular.equals(this.actual, expected);
+            }
+        });
+
+        // set the modules up
+
         module('phonecatApp');
+        module('phonecatServices');
     });
 
     describe('PhoneListCtrl', function(){
@@ -59,13 +73,13 @@ describe('PhoneCat controllers', function() {
 
             // before the call we must not have a "phones" model
             // defined.
-            expect(scope.phones).toBeUndefined();
+            expect(scope.phones).toEqualData([]);
             // then the http method is triggered
             $httpBackend.flush();
 
             // now, if the correct get was made, then scope.phones
             // should be defined and should contain what we expect.
-            expect(scope.phones).toEqual([
+            expect(scope.phones).toEqualData([
                 {name: 'Nexus S'},{name: 'Motorola DROID'}
             ]);
         });
@@ -82,6 +96,11 @@ describe('PhoneCat controllers', function() {
 
         var scope, $httpBackend, ctrl;
 
+        var xyzPhoneData = {
+            name: 'phone xyz',
+            images: ['image/url1.png', 'image/url2.png']
+        };
+
         beforeEach(inject(
            function (_$httpBackend_, $rootScope, $routeParams, $controller) {
             $httpBackend = _$httpBackend_;
@@ -94,11 +113,9 @@ describe('PhoneCat controllers', function() {
         }));
 
         it("should fetch phone detail", function () {
-            expect(scope.phone).toBeUndefined();
-
+            expect(scope.phone).toEqualData({});
             $httpBackend.flush();
-
-            expect(scope.phone).toEqual({name: 'phone xyz'});
+            expect(scope.phone).toEqualData(xyzPhoneData);
         });
 
     });

@@ -6,9 +6,8 @@
 
 
 // Defining a module for our entire application. For the second
-// parameter of this, we are passing a list containing ngRoute and
-// phonecatControllers. This list contains the stuff (other modules)
-// that phonecatApp module depends on.
+// parameter of this, we are passing a list containing all of the
+// modules that this one depends on.
 var phonecatApp = angular.module('phonecatApp',[
     'ngRoute', 'phonecatControllers', 'phonecatFilters', 'phonecatServices'
 ]);
