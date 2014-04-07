@@ -13,6 +13,15 @@ Commenting almost everything forces you to do some research to explain some thin
 This repo is basically just for me for seeing later if i forget (yes, i will) something.
 
 
+## Testing
+
+```bash
+$ ./scripts/e2e-test.sh
+```
+
+- ps: make sure that there's the right server running localy on port 8000. The config for the e2e runner is based on that particular one for proxying.
+
+
 ## Want to contribute?
 
 That would be very cool, specially if you find an error. It is not my intent to change the content as it is intended to be a lot like the tutorial, as i said.
